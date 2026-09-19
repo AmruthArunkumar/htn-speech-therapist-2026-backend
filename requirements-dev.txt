@@ -1,0 +1,5 @@
+-r requirements.txt
+
+# Local mic demo and tests only - not needed to run the server.
+pytest>=8.0
+sounddevice>=0.5
