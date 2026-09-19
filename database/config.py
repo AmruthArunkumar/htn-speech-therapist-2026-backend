@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     jwt_secret_key: str
     jwt_algorithm: str
     access_token_expire_minutes: int
+    elevenlabs_api_key: str
+    elevenlabs_stt_model: str = "scribe_v2"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
