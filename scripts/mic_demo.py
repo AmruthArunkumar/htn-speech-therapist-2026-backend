@@ -107,13 +107,42 @@ def print_report(data: dict) -> None:
     print(f"\n  [{timings}]")
 
 
+def login(url: str, email: str, password: str) -> str | None:
+    """Return an access token, registering the account on first use."""
+    try:
+        # Registering an existing email is a 409; that is the normal path after
+        # the first run, so fall through to logging in either way.
+        httpx.post(f"{url}/auth/register",
+                   json={"email": email, "password": password}, timeout=30.0)
+        response = httpx.post(f"{url}/auth/login",
+                              data={"username": email, "password": password},
+                              timeout=30.0)
+    except httpx.ConnectError:
+        print(f"Could not reach {url}. Is uvicorn running?", file=sys.stderr)
+        return None
+
+    if response.status_code != 200:
+        print(f"Login failed {response.status_code}: {response.text}", file=sys.stderr)
+        return None
+    print(f"Signed in as {email}")
+    return response.json()["access_token"]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default="http://localhost:8000")
     parser.add_argument("--context", default=None, help="What you're practising")
     parser.add_argument("--speak", action="store_true", help="Play the cue aloud")
     parser.add_argument("--file", type=Path, help="Analyse this file instead of recording")
+    parser.add_argument("--email", default="demo@example.com", help="Account to analyse as")
+    parser.add_argument("--password", default="demo-password", help="Password for --email")
     args = parser.parse_args()
+
+    # /analyze is authenticated: attempts are saved per user.
+    token = login(args.url, args.email, args.password)
+    if token is None:
+        return 1
+    headers = {"Authorization": f"Bearer {token}"}
 
     tmp = Path(tempfile.mkdtemp(prefix="mic_demo_"))
 
@@ -134,6 +163,7 @@ def main() -> int:
             files=files,
             data=data,
             params={"speak": str(args.speak).lower()},
+            headers=headers,
             timeout=120.0,
         )
     except httpx.ConnectError:
