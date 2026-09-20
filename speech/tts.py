@@ -1,5 +1,7 @@
 """Optional ElevenLabs synthesis of the spoken coaching cue."""
 
+from __future__ import annotations
+
 import logging
 
 from database.config import get_settings

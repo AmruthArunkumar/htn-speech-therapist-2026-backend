@@ -1,5 +1,7 @@
 """Speech analysis endpoint - the surface the Expo app calls."""
 
+from __future__ import annotations
+
 from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile, status
 
 from speech.pipeline import (
