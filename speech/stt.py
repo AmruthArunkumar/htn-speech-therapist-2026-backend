@@ -1,5 +1,7 @@
 """ElevenLabs Scribe transcription. The only place the STT call lives."""
 
+from __future__ import annotations
+
 from io import BytesIO
 
 from database.config import get_settings

@@ -1,5 +1,7 @@
 """Gemini turns measurements into coaching. It explains numbers, never invents them."""
 
+from __future__ import annotations
+
 import json
 import logging
 from functools import lru_cache

@@ -1,5 +1,7 @@
 """Pydantic models shared across the speech analysis pipeline."""
 
+from __future__ import annotations
+
 from typing import Literal
 
 from pydantic import BaseModel, Field

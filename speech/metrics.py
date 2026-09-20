@@ -4,6 +4,8 @@ Pure functions over Scribe word timings: no network, no config, no API key.
 Everything the coach says must be traceable to a number produced here.
 """
 
+from __future__ import annotations
+
 import re
 
 from speech.schemas import FillerHit, PauseHit, SpeechMetrics, WordTiming
