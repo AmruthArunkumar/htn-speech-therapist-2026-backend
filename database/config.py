@@ -30,6 +30,20 @@ class Settings(BaseSettings):
     gemini_timeout_s: float = 30.0
     max_audio_seconds: int = 120
 
+    # Practice clips are stored in S3; Mongo keeps only the object key.
+    # Leave s3_bucket empty to run without AWS - uploads are skipped and
+    # reviews save with audio=None, so local dev needs no credentials.
+    s3_bucket: str = ""
+    s3_region: str = "us-east-1"
+    s3_key_prefix: str = "speech-attempts"
+    # Blank falls back to boto3's own chain (instance/task role, ~/.aws,
+    # AWS_* vars), which is what you want anywhere but a laptop.
+    aws_access_key_id: str = ""
+    aws_secret_access_key: str = ""
+    # Playback URLs are signed per request. Long enough to start playing,
+    # short enough that a leaked link dies quickly.
+    s3_url_expiry_s: int = 3600
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
 
