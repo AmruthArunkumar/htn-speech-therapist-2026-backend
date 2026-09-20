@@ -1,7 +1,8 @@
 """Speech analysis endpoint - the surface the Expo app calls."""
 
-import logging
 from __future__ import annotations
+
+import logging
 
 from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile, status
 
